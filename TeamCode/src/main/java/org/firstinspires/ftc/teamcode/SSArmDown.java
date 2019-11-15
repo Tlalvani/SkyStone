@@ -18,7 +18,7 @@ public class SSArmDown extends SSAutoClasses
         while(opModeIsActive()) {
 robot.AutoArm.setPosition(robot.servoarmdown);
 robot.AutoArmJoint.setPosition(robot.servojointdown);
-robot.AutoArmRotate.setPosition(robot.servorotateback);
+robot.AutoArmRotate.setPosition(robot.servorotaterblue);
 
             sleep(1000000);
         }

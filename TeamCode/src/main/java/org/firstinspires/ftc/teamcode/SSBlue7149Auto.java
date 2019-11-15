@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 
 
-@Autonomous(name="SSRedAuto", group="SS")  // @Autonomous(...) is the other common choice
-public class SSRedAuto extends SSAutoClasses
+@Autonomous(name="SS7149BlueAuto", group="SS")  // @Autonomous(...) is the other common choice
+public class SSBlue7149Auto extends SSAutoClasses
 {
     int skystone = 0;
 
@@ -14,7 +14,7 @@ public class SSRedAuto extends SSAutoClasses
     public void runOpMode() throws InterruptedException {
 
         initSensors();
-        initVuforia();
+        initWebcamVuforia();
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             initTfod();
         } else {
@@ -28,9 +28,10 @@ public class SSRedAuto extends SSAutoClasses
         waitForStart();
         runtime.reset();
 
-        DriveTargetPosition(-1000,0,0,-1000); //1650
-        Drive(.25,.25); //.4
-        while (robot.LF.isBusy() & robot.RB.isBusy() & opModeIsActive()) {
+        DriveTargetPosition(0,-1000,-1000,0); //1650
+        Drive(.3,.3); //.4
+        while (robot.LB.isBusy() & robot.RF.isBusy() & opModeIsActive()) {
+            robot.AutoArmRotate.setPosition(robot.servorotaterblue);
         }
         Drive(0,0);
 
@@ -40,34 +41,32 @@ public class SSRedAuto extends SSAutoClasses
             }
 
             if(skystone == 0) {
-                skystone = runPhoneDetection(skystone);
+                skystone = runDetection(skystone);
             }
         }
         telemetry.addData("stone:",skystone);
         telemetry.update();
 
-        DriveTargetPosition(-700,0,0,-700);
+        DriveTargetPosition(0,-800,-800,0);
         Drive(.3,.3);
-        while (robot.LF.isBusy() & robot.RB.isBusy() & opModeIsActive()) {
+        while (robot.LB.isBusy() & robot.RF.isBusy() & opModeIsActive()) {
         }
         Drive(0,0);
 
+        DriveTargetPosition(50,-50,-50,50);
+        Drive(.4,.4);
+        while (robot.LB.isBusy() & robot.RF.isBusy() & opModeIsActive()) {
+        }
+        Drive(0,0);
 
         DriveTargetPosition(-50,-50,-50,-50);
         Drive(.4,.4);
-        DrivebaseBusy();
-        Drive(0,0);
-
-
-        DriveTargetPosition(170,170,170,170);
-        Drive(.4,.4);
         while (robot.LB.isBusy() & robot.RF.isBusy() & robot.LF.isBusy() & robot.RB.isBusy() & opModeIsActive()) {
-            robot.AutoArmRotate.setPosition(robot.servorotatered);
         }
         Drive(0,0);
 
+      StoneMove(skystone,30,200,330);
 
-        StoneMove(skystone,0,200,365);
         Drive(.4,.4);
         while (robot.LB.isBusy() & robot.RF.isBusy() & robot.LF.isBusy() & robot.RB.isBusy() & opModeIsActive()) {
         }
@@ -83,12 +82,12 @@ public class SSRedAuto extends SSAutoClasses
         robot.Grab1.setPosition(robot.grab1close);
         robot.Grab2.setPosition(robot.grab2close);
         sleep(1000);
-        robot.AutoArm.setPosition(robot.servoarmdown);
         robot.AutoArmJoint.setPosition(robot.servojointup);
+        robot.AutoArm.setPosition(robot.servoarmdown);
 
 
-        StoneMove(skystone,3420,3275,3020);
-     Drive(RampPower(3600, .4,.2),RampPower(3600, .4,.2));
+        StoneMove(skystone,3615,3415,3315);
+     Drive(RampPower(3615, .5,.2),RampPower(3600, .5,.2));
 
 
         while (robot.LB.isBusy() & robot.RF.isBusy() & robot.LF.isBusy() & robot.RB.isBusy() & opModeIsActive()) {
@@ -97,55 +96,36 @@ public class SSRedAuto extends SSAutoClasses
             }
 
             else {
-               robot.AutoArmRotate.setPosition(robot.servorotatered);
+                robot.AutoArmRotate.setPosition(robot.servorotaterblue);
             }
         }
      Drive(0,0);
 
         robot.AutoArm.setPosition(robot.servoarmdeliver);
-        sleep(500);
-      robot.AutoArmJoint.setPosition(robot.servojointdeliverred);
+        sleep(1000);
+        robot.AutoArmJoint.setPosition(robot.servojointdeliver);
         sleep(500);
      robot.Grab1.setPosition(robot.grab1open);
      robot.Grab2.setPosition(robot.grab2open);
-     sleep(1000);
+     sleep(500);
+
+        DriveTargetPosition(-500,-500,-500,-500);
+        Drive(.4,.4);
+        while (robot.LB.isBusy() & robot.RF.isBusy() & robot.LF.isBusy() & robot.RB.isBusy() & opModeIsActive()) {
+        }
+        Drive(0,0);
         robot.AutoArm.setPosition(robot.servoarmup);
         ResetArm();
 
-      DriveTargetPosition(-200,-200,-200,-200);
+        DriveTargetPosition(-400,-400,-400,-400);
         Drive(.4,.4);
         while (robot.LB.isBusy() & robot.RF.isBusy() & robot.LF.isBusy() & robot.RB.isBusy() & opModeIsActive()) {
         }
         Drive(0,0);
+        robot.AutoArm.setPosition(robot.servoarmup);
+        ResetArm();
 
 
-     imu(90);
-     DriveTargetPosition(300,300,300,300);
-     Drive(.4,.4);
-     while (robot.LB.isBusy() & robot.RF.isBusy() & robot.LF.isBusy() & robot.RB.isBusy() & opModeIsActive()) {
-        }
-     Drive(0,0);
-
-        robot.LeftLatch.setPosition(robot.leftlatchclose);
-        robot.RightLatch.setPosition(robot.rightlatchclose);
-        robot.LeftIntake.setPower(0);
-        robot.RightIntake.setPower(0);
-
-        sleep(1000);
-        DriveTargetPosition(-1100,-1100,-1100,-1100);
-        Drive(.4,.4);
-        while (robot.LB.isBusy() & robot.RF.isBusy() & robot.LF.isBusy() & robot.RB.isBusy() & opModeIsActive()) {
-        }
-        Drive(0,0);
-
-        robot.LeftLatch.setPosition(robot.leftlatchopen);
-        robot.RightLatch.setPosition(robot.rightlatchopen);
-
-        DriveTargetPosition(-2000,2000,2000,-2000);
-        Drive(.3,.3);
-        while (robot.LB.isBusy() & robot.RF.isBusy() & opModeIsActive()) {
-        }
-        Drive(0,0);
 
         while(opModeIsActive()) {
             sleep(1000000);

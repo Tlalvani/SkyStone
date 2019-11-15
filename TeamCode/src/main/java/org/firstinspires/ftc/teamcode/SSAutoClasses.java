@@ -22,6 +22,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import static org.firstinspires.ftc.robotcore.external.tfod.TfodSkyStone.TFOD_MODEL_ASSET;
 
@@ -168,6 +169,8 @@ public void ResetArm(){
     robot.AutoArmRotate.setPosition(robot.servorotatehome);
     sleep(2000);
     robot.AutoArm.setPosition(robot.servoarmhome);
+    robot.AutoArm.setPwmDisable();
+    robot.AutoArmJoint.setPwmDisable();
 }
 
     public void BusyLift() {
@@ -238,7 +241,7 @@ public void ResetArm(){
                 }
                 if (updatedRecognitions.size()>0 && stone) {
 
-                    if (skystone.getLeft() < 50) {
+                    if (skystone.getLeft() < 150) {
                         value = 3;
                     } else if (skystone.getLeft() < 400) {
                         value = 2;
@@ -278,9 +281,9 @@ public void ResetArm(){
                 }
                 if (updatedRecognitions.size()>0 && stone) {
 
-                    if (skystone.getRight() > 1000) {
+                    if (skystone.getLeft() > 20) {
                         value = 3;
-                    } else if (skystone.getRight() > 800) {
+                    } else if (skystone.getLeft() < 120) {
                         value = 2;
                     } else if (skystone.getRight() > 300) {
                         value = 1;
@@ -379,7 +382,7 @@ public void ResetArm(){
     }
 
     public void imu(double degrees) {
-
+        period.reset();
         robot.DrivebaseWithEncoders();
         telemetry.update();
         double leftSpeedt; //Power to feed the motors
@@ -454,6 +457,67 @@ public void ResetArm(){
             }
             telemetry.update();
             Drive(leftSpeedt, rightSpeedt);
+            telemetry.update();
+
+            idle();
+        }
+        Drive(0, 0);
+
+    }
+
+    public void PDimu(double degrees) {
+        telemetry.update();
+        double leftSpeedt; //Power to feed the motors
+        double rightSpeedt;
+
+        double Z = angles.firstAngle;
+
+        double error;
+        double prevError = 0;
+
+        double proportional;
+        double integral = 0;
+        double derivative;
+        double kD = .01;
+        double output;
+
+        ElapsedTime loopTime = new ElapsedTime();
+        double dt;
+
+        loopTime.reset();
+
+        while (angles.firstAngle < (degrees - robot.AngleTolerance) || angles.firstAngle > (degrees + robot.AngleTolerance) & opModeIsActive() & !isStopRequested()) {
+            // positie turns left, think of a x,y coordinate system
+            telemetry.update();
+
+            error = (degrees-robot.currentangle); //get the current error
+
+            dt = loopTime.time(TimeUnit.SECONDS); //set the time since the last loop
+            derivative = (error - prevError) / dt;
+            loopTime.reset();//reset the loop timer
+
+            leftSpeedt = -((error) / robot.divisorforimu);  //Calculate speed for each side
+            rightSpeedt = ((error) / robot.divisorforimu);  //See Gyro Straight video for detailed explanation
+
+           leftSpeedt = leftSpeedt+(derivative*kD);
+            rightSpeedt = rightSpeedt+(derivative*kD);
+            telemetry.update();
+/*
+            if (leftSpeedt > 0) {
+                leftSpeedt = Range.clip(leftSpeedt, robot.minspeedimu, robot.maxspeedimu);
+            } else if (leftSpeedt < 0) {
+                leftSpeedt = Range.clip(leftSpeedt, -(robot.maxspeedimu), -(robot.minspeedimu));
+            }
+
+
+            if (rightSpeedt > 0) {
+                rightSpeedt = Range.clip(rightSpeedt, robot.minspeedimu, robot.maxspeedimu);
+            } else if (rightSpeedt < 0) {
+                rightSpeedt = Range.clip(rightSpeedt, -(robot.maxspeedimu), -(robot.minspeedimu));
+            } */
+            telemetry.update();
+            Drive(leftSpeedt, rightSpeedt);
+            prevError = error; //set the previous error for the next loop cycle
             telemetry.update();
 
             idle();

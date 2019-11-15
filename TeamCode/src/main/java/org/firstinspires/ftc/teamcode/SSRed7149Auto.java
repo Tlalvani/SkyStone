@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 
 
-@Autonomous(name="SSRedAuto", group="SS")  // @Autonomous(...) is the other common choice
-public class SSRedAuto extends SSAutoClasses
+@Autonomous(name="SSRed7149Auto", group="SS")  // @Autonomous(...) is the other common choice
+public class SSRed7149Auto extends SSAutoClasses
 {
     int skystone = 0;
 
@@ -108,44 +108,22 @@ public class SSRedAuto extends SSAutoClasses
         sleep(500);
      robot.Grab1.setPosition(robot.grab1open);
      robot.Grab2.setPosition(robot.grab2open);
-     sleep(1000);
+     sleep(500);
+        DriveTargetPosition(-500,-500,-500,-500);
+        Drive(.4,.4);
+        while (robot.LB.isBusy() & robot.RF.isBusy() & robot.LF.isBusy() & robot.RB.isBusy() & opModeIsActive()) {
+        }
+        Drive(0,0);
         robot.AutoArm.setPosition(robot.servoarmup);
         ResetArm();
 
-      DriveTargetPosition(-200,-200,-200,-200);
+      DriveTargetPosition(-1800,-1800,-1800,-1800);
         Drive(.4,.4);
         while (robot.LB.isBusy() & robot.RF.isBusy() & robot.LF.isBusy() & robot.RB.isBusy() & opModeIsActive()) {
         }
         Drive(0,0);
 
 
-     imu(90);
-     DriveTargetPosition(300,300,300,300);
-     Drive(.4,.4);
-     while (robot.LB.isBusy() & robot.RF.isBusy() & robot.LF.isBusy() & robot.RB.isBusy() & opModeIsActive()) {
-        }
-     Drive(0,0);
-
-        robot.LeftLatch.setPosition(robot.leftlatchclose);
-        robot.RightLatch.setPosition(robot.rightlatchclose);
-        robot.LeftIntake.setPower(0);
-        robot.RightIntake.setPower(0);
-
-        sleep(1000);
-        DriveTargetPosition(-1100,-1100,-1100,-1100);
-        Drive(.4,.4);
-        while (robot.LB.isBusy() & robot.RF.isBusy() & robot.LF.isBusy() & robot.RB.isBusy() & opModeIsActive()) {
-        }
-        Drive(0,0);
-
-        robot.LeftLatch.setPosition(robot.leftlatchopen);
-        robot.RightLatch.setPosition(robot.rightlatchopen);
-
-        DriveTargetPosition(-2000,2000,2000,-2000);
-        Drive(.3,.3);
-        while (robot.LB.isBusy() & robot.RF.isBusy() & opModeIsActive()) {
-        }
-        Drive(0,0);
 
         while(opModeIsActive()) {
             sleep(1000000);

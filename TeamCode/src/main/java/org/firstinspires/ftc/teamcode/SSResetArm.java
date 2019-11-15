@@ -25,6 +25,8 @@ sleep(2000);
 robot.AutoArmRotate.setPosition(robot.servorotatehome);
 sleep(2000);
 robot.AutoArm.setPosition(robot.servoarmhome);
+robot.AutoArm.setPwmDisable();
+robot.AutoArmJoint.setPwmDisable();
 
 
 //robot.AutoArmJoint.setPosition(robot.servojointdown);

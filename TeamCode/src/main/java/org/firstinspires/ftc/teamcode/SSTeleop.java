@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -33,7 +34,7 @@ public class SSTeleop extends OpMode {
 
     /* local OpMode members. */
     HardwareMap hwMap = null;
-    private ElapsedTime period = new ElapsedTime();
+    private ElapsedTime runtime = new ElapsedTime();
     SSHardwareDrivebase robot = new SSHardwareDrivebase();
 
 
@@ -44,6 +45,9 @@ public class SSTeleop extends OpMode {
         robot.init(hardwareMap);
 
 
+      //  robot.DrivebaseWithEncoders();
+
+
     }
 
     /*
@@ -51,6 +55,7 @@ public class SSTeleop extends OpMode {
      */
     @Override
     public void init_loop() {
+        runtime.reset();
     }
 
     /*
@@ -63,7 +68,26 @@ public class SSTeleop extends OpMode {
      */
     @Override
     public void loop() {
+if(gamepad1.right_bumper){
+    robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP1_2_NO_BLENDING);
+}
+else if(runtime.seconds()>122){
+            robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE_GREEN);
+        }
+else if(runtime.seconds()>110){
+    robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_RED);
+}
 
+else if(runtime.seconds()>90){
+    robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+
+}
+else if (runtime.seconds()>60){
+    robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP1_HEARTBEAT_FAST);
+        }
+else{
+    robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE_GREEN);
+}
         //robot.AutoArm.setPosition(robot.servoarmhome);
         robot.AutoArmRotate.setPosition(robot.servorotatehome);
         float Ch1 = (gamepad1.right_stick_x);
@@ -88,8 +112,6 @@ public class SSTeleop extends OpMode {
 
 
 
-
-
         // scale the joystick value to make it easier to control
         // the robot more precisely at slower speeds.
         rightfront = (float) robot.scaleInput(rightfront);
@@ -110,19 +132,30 @@ public class SSTeleop extends OpMode {
         if(gamepad1.right_trigger>.1){
             robot.RightIntakeArm.setPosition(robot.rightintakearmout);
             robot.LeftIntakeArm.setPosition(robot.leftintakearmout);
+
         }
 
         if(gamepad1.right_bumper){
-            robot.LeftIntake.setPower(.5);
-            robot.RightIntake.setPower(.5);
+            robot.LeftIntake.setPower(1);
+            robot.RightIntake.setPower(1);
             robot.RightIntakeArm.setPosition(robot.rightintakearmin);
             robot.LeftIntakeArm.setPosition(robot.leftintakearmin);
             robot.LeftClaw.setPosition(robot.leftclawopen);
             robot.RightClaw.setPosition(robot.rightclawopen);
         }
+
+        else if (gamepad1.x){
+            robot.LeftIntake.setPower(-1);
+            robot.RightIntake.setPower(-1);
+            robot.RightIntakeArm.setPosition(robot.rightintakearmin);
+            robot.LeftIntakeArm.setPosition(robot.leftintakearmin);
+        }
         else{
             robot.LeftIntake.setPower(0);
             robot.RightIntake.setPower(0);
+            robot.RightIntakeArm.setPosition(robot.rightintakearmout);
+            robot.LeftIntakeArm.setPosition(robot.leftintakearmout);
+
 
         }
 

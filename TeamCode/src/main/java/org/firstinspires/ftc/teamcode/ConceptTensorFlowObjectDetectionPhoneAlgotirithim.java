@@ -129,7 +129,7 @@ public class ConceptTensorFlowObjectDetectionPhoneAlgotirithim extends LinearOpM
 
                         if (skystone.getRight() > 1000) {
                             value = 3;
-                        } else if (skystone.getRight() > 800) {
+                        } else if (skystone.getRight() > 600) {
                             value = 2;
                         } else if (skystone.getRight() > 300) {
                             value = 1;

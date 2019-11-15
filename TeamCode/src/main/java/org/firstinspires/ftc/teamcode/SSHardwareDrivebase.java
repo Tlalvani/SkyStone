@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -32,8 +33,8 @@ public class SSHardwareDrivebase {
 
 
 
-    double leftclawclose = .72;
-    double rightclawclose = .27;
+    double leftclawclose = .78; //.72
+    double rightclawclose = .45; //.27
     double leftclawopen = .49;
    double rightclawopen = .48;
 
@@ -42,18 +43,20 @@ public class SSHardwareDrivebase {
     double leftintakearmin = .9;
     double rightintakearmin = .35;
 
-    double servorotaterblue = .03;
-    double servorotatered = .71;
-    double servorotateback = .37;
-    double servorotatehome = .95;
+    double servorotaterblue = .01;
+    double servorotatered = .68;
+    double servorotateback = .35;
+    double servorotatehome = .93;
 
     double servoarmup = .18;
-    double servoarmdown = .5;
+    double servoarmdown = .45;
+   double servoarmpickup = .5;
     double servoarmhome = .37;
     double servoarmdeliver = .4;
     double servojointup = .23;
     double servojointdown =.74;
     double servojointdeliver = .6;
+    double servojointdeliverred = .5;
     double servojointhome = .2;
 
     double leftlatchopen = .44;
@@ -67,17 +70,20 @@ public class SSHardwareDrivebase {
     double grab1open = .3;
     double grab2open = .6;
 
-    double grab1home = .8;
+    double grab1home = .65;
     double grab2home = .8;
 
 
     boolean Liftedup = false;
-    boolean Liftdown = false;
+
+    RevBlinkinLedDriver blinkinLedDriver;
+    RevBlinkinLedDriver.BlinkinPattern pattern;
 
     /* Public OpMode members. */
     public DcMotor LF, RF, LB, RB, Lift1, Lift2, LeftIntake, RightIntake;
-    public Servo LeftLatch, RightLatch, LeftClaw, RightClaw, LeftIntakeArm, RightIntakeArm,AutoArmRotate, AutoArmJoint, Grab1, Grab2;
-    public ServoImplEx AutoArm;
+    public Servo LeftLatch, RightLatch, LeftClaw, RightClaw, LeftIntakeArm, RightIntakeArm,AutoArmRotate, Grab1, Grab2;
+    public ServoImplEx AutoArm,AutoArmJoint;
+
 
 
     // public CRServo Intake, Intake2;
@@ -116,12 +122,14 @@ public class SSHardwareDrivebase {
         RightIntakeArm = hwMap.servo.get("rightintakearm");
 
         AutoArm =  hwMap.get(ServoImplEx.class, "autoarm");
-        AutoArmJoint = hwMap.servo.get("autoarmjoint");
+        AutoArmJoint =  hwMap.get(ServoImplEx.class, "autoarmjoint");
         AutoArmRotate = hwMap.servo.get("autoarmrotate");
         Grab1 = hwMap.servo.get("grab1");
         Grab2 = hwMap.servo.get("grab2");
 
-
+        blinkinLedDriver = hwMap.get(RevBlinkinLedDriver.class, "blinkin");
+        pattern = RevBlinkinLedDriver.BlinkinPattern.BLACK;
+        blinkinLedDriver.setPattern(pattern);
 
 
         LB.setDirection(DcMotor.Direction.REVERSE);

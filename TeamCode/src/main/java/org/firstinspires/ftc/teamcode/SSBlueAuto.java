@@ -32,7 +32,7 @@ public class SSBlueAuto extends SSAutoClasses
         runtime.reset();
 
         DriveTargetPosition(0,-1000,-1000,0); //1650
-        Drive(.25,.25); //.4
+        Drive(.3,.3); //.4
         while (robot.LB.isBusy() & robot.RF.isBusy() & opModeIsActive()) {
             robot.AutoArmRotate.setPosition(robot.servorotaterblue);
         }
@@ -57,19 +57,25 @@ public class SSBlueAuto extends SSAutoClasses
         Drive(0,0);
 
         DriveTargetPosition(50,-50,-50,50);
-        Drive(.3,.3);
+        Drive(.4,.4);
         while (robot.LB.isBusy() & robot.RF.isBusy() & opModeIsActive()) {
         }
         Drive(0,0);
 
-      StoneMove(skystone,30,200,300);
+        DriveTargetPosition(-50,-50,-50,-50);
+        Drive(.4,.4);
+        while (robot.LB.isBusy() & robot.RF.isBusy() & robot.LF.isBusy() & robot.RB.isBusy() & opModeIsActive()) {
+        }
+        Drive(0,0);
+
+      StoneMove(skystone,30,200,330);
 
         Drive(.4,.4);
         while (robot.LB.isBusy() & robot.RF.isBusy() & robot.LF.isBusy() & robot.RB.isBusy() & opModeIsActive()) {
         }
         Drive(0,0);
 
-        robot.AutoArm.setPosition(robot.servoarmdown);
+        robot.AutoArm.setPosition(robot.servoarmpickup);
         robot.Grab1.setPosition(robot.grab1open);
         robot.Grab2.setPosition(robot.grab2open);
         robot.AutoArmJoint.setPosition(robot.servojointdown);
@@ -80,10 +86,11 @@ public class SSBlueAuto extends SSAutoClasses
         robot.Grab2.setPosition(robot.grab2close);
         sleep(1000);
         robot.AutoArmJoint.setPosition(robot.servojointup);
+        robot.AutoArm.setPosition(robot.servoarmdown);
 
 
-        StoneMove(skystone,3600,3415,3185);
-     Drive(RampPower(3600, .5,.2),RampPower(3600, .5,.2));
+        StoneMove(skystone,3615,3415,3315);
+     Drive(RampPower(3615, .5,.2),RampPower(3600, .5,.2));
 
 
         while (robot.LB.isBusy() & robot.RF.isBusy() & robot.LF.isBusy() & robot.RB.isBusy() & opModeIsActive()) {
@@ -107,7 +114,7 @@ public class SSBlueAuto extends SSAutoClasses
         robot.AutoArm.setPosition(robot.servoarmup);
         ResetArm();
 
-        DriveTargetPosition(-200,-200,-200,-200);
+        DriveTargetPosition(-150,-150,-150,-150);
         Drive(.4,.4);
         while (robot.LB.isBusy() & robot.RF.isBusy() & robot.LF.isBusy() & robot.RB.isBusy() & opModeIsActive()) {
         }
@@ -125,8 +132,8 @@ public class SSBlueAuto extends SSAutoClasses
         robot.RightLatch.setPosition(robot.rightlatchclose);
 
         sleep(1000);
-        DriveTargetPosition(-1100,-1100,-1100,-1100);
-        Drive(.4,.4);
+        DriveTargetPosition(-1150,-1150,-1150,-1150);
+        Drive(.5,.5);
         while (robot.LB.isBusy() & robot.RF.isBusy() & robot.LF.isBusy() & robot.RB.isBusy() & opModeIsActive()) {
         }
         Drive(0,0);
