@@ -55,11 +55,12 @@ abstract public class SSAutoClasses extends LinearOpMode {
     // State used for updating telemetry
     Orientation angles;
     Acceleration gravity;
+    double dt=1;
 
     protected ElapsedTime runtime = new ElapsedTime();
     /* local OpMode members. */
     HardwareMap hwMap = null;
-    private ElapsedTime period = new ElapsedTime();
+    protected ElapsedTime period = new ElapsedTime();
     SSHardwareDrivebase robot = new SSHardwareDrivebase();
 
     private static final String VUFORIA_KEY =
@@ -382,7 +383,6 @@ public void ResetArm(){
     }
 
     public void imu(double degrees) {
-        period.reset();
         robot.DrivebaseWithEncoders();
         telemetry.update();
         double leftSpeedt; //Power to feed the motors
@@ -465,7 +465,8 @@ public void ResetArm(){
 
     }
 
-    public void PDimu(double degrees) {
+    public void PDimu(double degrees, ElapsedTime looptime) {
+        robot.DrivebaseWithEncoders();
         telemetry.update();
         double leftSpeedt; //Power to feed the motors
         double rightSpeedt;
@@ -475,26 +476,22 @@ public void ResetArm(){
         double error;
         double prevError = 0;
 
-        double proportional;
-        double integral = 0;
         double derivative;
-        double kD = .01;
-        double output;
+        double kD = .1;
 
-        ElapsedTime loopTime = new ElapsedTime();
-        double dt;
 
-        loopTime.reset();
+
 
         while (angles.firstAngle < (degrees - robot.AngleTolerance) || angles.firstAngle > (degrees + robot.AngleTolerance) & opModeIsActive() & !isStopRequested()) {
             // positie turns left, think of a x,y coordinate system
             telemetry.update();
 
-            error = (degrees-robot.currentangle); //get the current error
+            error = (degrees-angles.firstAngle); //get the current error
 
-            dt = loopTime.time(TimeUnit.SECONDS); //set the time since the last loop
+            dt = looptime.seconds(); //set the time since the last loop
+
             derivative = (error - prevError) / dt;
-            loopTime.reset();//reset the loop timer
+            looptime.reset();//reset the loop timer
 
             leftSpeedt = -((error) / robot.divisorforimu);  //Calculate speed for each side
             rightSpeedt = ((error) / robot.divisorforimu);  //See Gyro Straight video for detailed explanation
@@ -502,19 +499,19 @@ public void ResetArm(){
            leftSpeedt = leftSpeedt+(derivative*kD);
             rightSpeedt = rightSpeedt+(derivative*kD);
             telemetry.update();
-/*
+
             if (leftSpeedt > 0) {
-                leftSpeedt = Range.clip(leftSpeedt, robot.minspeedimu, robot.maxspeedimu);
+                leftSpeedt = Range.clip(leftSpeedt, 0, robot.pdmaxspeedimu);
             } else if (leftSpeedt < 0) {
-                leftSpeedt = Range.clip(leftSpeedt, -(robot.maxspeedimu), -(robot.minspeedimu));
+                leftSpeedt = Range.clip(leftSpeedt, -(robot.pdmaxspeedimu), -(0));
             }
 
 
             if (rightSpeedt > 0) {
-                rightSpeedt = Range.clip(rightSpeedt, robot.minspeedimu, robot.maxspeedimu);
+                rightSpeedt = Range.clip(rightSpeedt, 0, robot.pdmaxspeedimu);
             } else if (rightSpeedt < 0) {
-                rightSpeedt = Range.clip(rightSpeedt, -(robot.maxspeedimu), -(robot.minspeedimu));
-            } */
+                rightSpeedt = Range.clip(rightSpeedt, -(robot.pdmaxspeedimu), -(0));
+            }
             telemetry.update();
             Drive(leftSpeedt, rightSpeedt);
             prevError = error; //set the previous error for the next loop cycle

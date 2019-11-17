@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@Autonomous(name="SSPD", group="SS")  // @Autonomous(...) is the other common choice
-public class SSPDAuto extends SSAutoClasses
+@Autonomous(name="SSP", group="SS")  // @Autonomous(...) is the other common choice
+public class SSPAuto extends SSAutoClasses
 {
     ElapsedTime loopTime = new ElapsedTime();
 
@@ -22,7 +22,7 @@ public class SSPDAuto extends SSAutoClasses
         loopTime.reset();
 
         while(opModeIsActive()) {
-PDimu(90,loopTime);
+imu(90);
 
         }
 

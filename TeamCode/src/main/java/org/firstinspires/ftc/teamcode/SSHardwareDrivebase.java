@@ -27,13 +27,14 @@ public class SSHardwareDrivebase {
 
     double divisorforimu = 150;
     double maxspeedimu = .25;
+    double pdmaxspeedimu = .8;
     double minspeedimu = 0;
     double currentangle = 0;
     double AngleTolerance = 3.5;
 
 
 
-    double leftclawclose = .78; //.72
+    double leftclawclose = .8; //.72
     double rightclawclose = .45; //.27
     double leftclawopen = .49;
    double rightclawopen = .48;
